@@ -27,6 +27,12 @@
     <Folder Include="Controllers\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Taco.Challenge.Infrastructure.InMemory\Taco.Challenge.Infrastructure.InMemory.csproj" />
+    <ProjectReference Include="..\Taco.Challenge.Infrastructure.Queries\Taco.Challenge.Infrastructure.csproj" />
+    <ProjectReference Include="..\Taco.Challenge.Menu\Taco.Challenge.Restaurant.csproj" />
+  </ItemGroup>
+
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
     <!-- Ensure Node.js is installed -->
     <Exec Command="node --version" ContinueOnError="true">

@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Taco.Challenge.Infrastructure.Queries\Taco.Challenge.Infrastructure.csproj" />
+    <ProjectReference Include="..\Taco.Challenge.Menu\Taco.Challenge.Restaurant.csproj" />
+  </ItemGroup>
+
+</Project>

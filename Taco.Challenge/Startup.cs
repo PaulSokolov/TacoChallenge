@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Taco.Challenge.Infrastructure;
+using Taco.Challenge.Infrastructure.InMemory.Extensions;
+using Taco.Challenge.Restaurant.Queries;
 
 namespace Taco.Challenge
 {
@@ -25,6 +28,11 @@ namespace Taco.Challenge
             {
                 configuration.RootPath = "ClientApp/dist";
             });
+            services.AddInMemoryQueryDispatcherClient();
+
+            var qd = services.BuildServiceProvider().GetService<IQueryDispatcherClient>();
+            var res =  qd.Query(new FoodQuery { });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
