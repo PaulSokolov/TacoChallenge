@@ -60,9 +60,50 @@ namespace Taco.Challenge.Infrastructure.InMemory
             throw new Exception("There is no handlers for this query");
         }
 
-        public Task<TResponse> QueryAsync<TResponse>(IQuery<TResponse> query) where TResponse : IResponse
+        public async Task<TResponse> QueryAsync<TResponse>(IQuery<TResponse> query) where TResponse : IResponse
         {
-            return Task.FromResult(Query(query));
+            string path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            List<Assembly> allAssemblies = new List<Assembly>();
+
+            foreach (string dll in Directory.GetFiles(path, "Taco.*.dll"))
+                allAssemblies.Add(Assembly.LoadFile(dll));
+
+            var handlerAsyncType = typeof(IQueryAsyncProvider<,>).MakeGenericType(query.GetType(), typeof(TResponse));
+            var methodAsyncInfo = handlerAsyncType.GetMethod("Execute");
+            var types = allAssemblies.SelectMany(s => s.GetTypes()).Where(p => handlerAsyncType.IsAssignableFrom(p));
+
+            var serviceType = types.First();
+            var actionToInvoke = serviceType.GetMethods()
+                .Where(m => m.Name == "Execute" && m.GetParameters().Any(p => p.ParameterType == query.GetType()))
+                .FirstOrDefault();
+
+            var parameters = new List<object>();
+            bool isMatched = true;
+            foreach (var constructor in serviceType.GetConstructors().OrderByDescending(_ => _.GetParameters().Count()))
+            {
+                foreach (var parameterType in constructor.GetParameters().Select(_ => _.ParameterType))
+                {
+                    var param = _serviceProvider.GetService(parameterType);
+                    if (param == null)
+                    {
+                        isMatched = false;
+                        parameters = new List<object>();
+                        break;
+                    }
+
+                    parameters.Add(param);
+                }
+
+                if (isMatched)
+                {
+                    var service = Activator.CreateInstance(serviceType, parameters.ToArray());
+
+                    return (TResponse)await (dynamic)methodAsyncInfo.Invoke(service, new object[] { query });
+                }
+            }
+
+            throw new Exception("There is no handlers for this query");
+           
         }
     }
 }

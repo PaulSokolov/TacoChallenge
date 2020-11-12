@@ -8,5 +8,6 @@ namespace Taco.Challenge.Restaurant.Queries
 {
     public class FoodQuery : IQuery<FoodQueryResponse>
     {
+        public string SearchText { get; set; }
     }
 }
