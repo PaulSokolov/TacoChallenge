@@ -21,7 +21,7 @@ namespace Taco.Challenge.Controllers
         public async Task<IActionResult> Get(string search)
         {
             if (string.IsNullOrEmpty(search))
-                return NotFound();
+                return NotFound("Provide some search info");
 
             try
             {

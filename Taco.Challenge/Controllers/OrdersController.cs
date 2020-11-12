@@ -1,11 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Taco.Challenge.Controllers.Requests;
-using Taco.Challenge.Infrastructure;
-using Taco.Challenge.Restaurant.Queries;
 
 namespace Taco.Challenge.Controllers
 {
