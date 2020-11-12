@@ -30,9 +30,6 @@ namespace Taco.Challenge
             });
             services.AddInMemoryQueryDispatcherClient();
 
-            var qd = services.BuildServiceProvider().GetService<IQueryDispatcherClient>();
-            var res =  qd.Query(new FoodQuery { });
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
